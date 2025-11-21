@@ -1,0 +1,20 @@
+{% extends 'shop/base.html' %}
+{% block content %}
+<div class="grid md:grid-cols-2 gap-4">
+  <div>
+    {% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full">{% endif %}
+  </div>
+  <div>
+    <h1 class="text-2xl font-bold">{{ product.name }}</h1>
+    <p class="text-xl">₹{{ product.price }}</p>
+    <p>{{ product.description }}</p>
+    <p>Metal: {{ product.metal_type }}</p>
+    {% if user.is_authenticated %}
+      <a href="{% url 'shop:add_to_cart' product.pk %}" class="border-1 text-white px-4 py-2 inline-block">Add to cart</a>
+      <a href="{% url 'shop:add_to_wishlist' product.pk %}" class="border-1 ml-2 inline-block">Wishlist</a>
+    {% else %}
+      <a href="{% url 'login' %}">Login to purchase</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

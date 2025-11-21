@@ -1,0 +1,112 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .contact-header {
+        background: url("{% static 'images/hero1.jpeg' %}") center/cover no-repeat;
+        height: 50%;
+        padding: 40px 0;
+        text-align: center;
+        color: #fff;
+    }
+    .contact-header h2 {
+        font-size: 42px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+    .contact-container {
+        max-width: 1100px;
+        margin: 50px auto;
+        padding: 20px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+    }
+    .contact-box {
+        padding: 25px;
+        border-radius: 10px;
+        background: #fff;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+    .contact-box i {
+        font-size: 30px;
+        margin-bottom: 10px;
+        color: #d4af37;
+    }
+    .contact-form input,
+    .contact-form textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        margin-bottom: 15px;
+        border-radius: 6px;
+        font-size: 16px;
+    }
+    .contact-btn {
+        background: #d4af37;
+        color: #fff;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: 0.3s;
+        font-size: 16px;
+        width: 100%;
+    }
+    .contact-btn:hover {
+        background: #b89428;
+    }
+    .map-box iframe {
+        width: 100%;
+        height: 300px;
+        border: none;
+        border-radius: 10px;
+    }
+</style>
+
+<section class="contact-header">
+    <h2>Contact Us</h2>
+    <p>We’d love to hear from you. Get in touch today!</p>
+</section>
+
+<section class="contact-container">
+
+    <!-- Contact Details -->
+    <div class="contact-box">
+        <i class="fas fa-phone"></i>
+        <h4>Phone</h4>
+        <p>+91 98765 43210</p>
+
+        <i class="fas fa-envelope" style="margin-top:15px;"></i>
+        <h4>Email</h4>
+        <p>support@jwelleryshop.com</p>
+
+        <i class="fas fa-location-dot" style="margin-top:15px;"></i>
+        <h4>Location</h4>
+        <p>Chennai, Tamil Nadu, India</p>
+    </div>
+
+    <!-- Contact Form -->
+    <div class="contact-box contact-form">
+        <h3>Send Us a Message</h3>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="name" placeholder="Your Name" required>
+            <input type="email" name="email" placeholder="Your Email" required>
+            <input type="text" name="subject" placeholder="Subject">
+            <textarea name="message" rows="6" placeholder="Your Message" required></textarea>
+            <button class="contact-btn">Submit</button>
+        </form>
+    </div>
+
+    <!-- Google Map -->
+    <div class="contact-box map-box">
+        <h3>Find Us</h3>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15544.502548477013!2d80.2241178!3d13.0506917!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5266e2f3502561%3A0xd6b8792b2043614d!2sT%20Nagar%2C%20Chennai!5e0!3m2!1sen!2sin!4v1700000000000"></iframe>
+    </div>
+
+</section>
+{% endblock %}
+

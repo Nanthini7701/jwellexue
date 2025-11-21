@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width,initial-scale=1'>
+  <title>Jewellery Shop</title>
+  <link rel='stylesheet' href='/static/css/style.css'>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    .nav-link {
+      @apply transition duration-200 ease-in-out;
+    }
+    .nav-link:hover {
+      @apply text-yellow-700;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800">
+
+<!-- Navbar -->
+<nav class="bg-white shadow-md sticky top-0 z-50 border-b border-yellow-200">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="flex justify-between h-16 items-center">
+
+      <!-- Logo -->
+      <a href="{% url 'shop:index' %}" class="text-2xl font-bold tracking-wide text-yellow-700">
+        ✨ Jewellery
+      </a>
+
+      <!-- Desktop Menu -->
+      <div class="hidden md:flex items-center space-x-6 text-lg font-medium">
+
+        <a href="{% url 'shop:index' %}" class="nav-link">Home</a>
+        <a href="{% url 'shop:about' %}" class="nav-link">About</a>
+        <a href="{% url 'shop:contact' %}" class="nav-link">Contact</a>
+
+        <!-- Search -->
+        <form method="get" action="{% url 'shop:index' %}" class="relative">
+          <input name="q"
+            placeholder="Search products..."
+            value="{{ q|default:'' }}"
+            class="border border-gray-300 rounded-full py-1 px-3 pl-9 focus:ring-yellow-400 focus:border-yellow-400" />
+          <span class="absolute left-2 top-1.5 text-gray-400 text-sm">🔍</span>
+        </form>
+
+        {% if user.is_authenticated %}
+          <a href="{% url 'shop:cart' %}" class="nav-link">
+            🛒 Cart ({{ request.user.cart_items.count }})
+          </a>
+
+          <a href="{% url 'shop:wishlist' %}" class="nav-link">
+            💛 Wishlist ({{ request.user.wishlist_items.count }})
+          </a>
+
+    <span class="font-bold text-yellow-700">Hi, {{ user.username }} 👋</span>
+    <form action="{% url 'shop:logout_success' %}" method="post" class="inline">
+        {% csrf_token %}
+        <button class="text-red-600 font-semibold ml-3">Logout</button>
+    </form>
+{% else %}
+    <a href="{% url 'shop:login' %}" class="block">Login</a>
+    <a href="{% url 'shop:signup' %}" class="block">Signup</a>
+{% endif %}
+      </div>
+
+      <!-- Mobile Toggle -->
+      <button class="md:hidden text-2xl" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+        ☰
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-yellow-200">
+    <div class="px-4 py-3 space-y-3 text-lg">
+
+      <a href="{% url 'shop:index' %}" class="nav-link block">Home</a>
+      <a href="{% url 'shop:about' %}" class="nav-link block">About</a>
+      <a href="{% url 'shop:contact' %}" class="nav-link block">Contact</a>
+
+      {% if user.is_authenticated %}
+        <a href="{% url 'shop:cart' %}" class="block">🛒 Cart ({{ request.user.cart_items.count }})</a>
+        <a href="{% url 'shop:wishlist' %}" class="block">💛 Wishlist ({{ request.user.wishlist_items.count }})</a>
+
+        <!-- Logout -->
+        <a href="{% url 'shop:logout_success' %}" class="block text-red-600 font-semibold">
+          Logout
+        </a>
+
+      {% else %}
+        <a href="{% url 'shop:login' %}" class="block">Login</a>
+        <a href="{% url 'shop:signup' %}" class="block">Signup</a>
+        <a href="{% url 'shop:forgot_password' %}" class="block text-blue-600">Forgot Password?</a>
+      {% endif %}
+
+    </div>
+  </div>
+</nav>
+{% if messages %}
+  <div class="max-w-7xl mx-auto px-4 mt-4">
+    {% for message in messages %}
+      <div class="mb-2 rounded p-3
+        {% if message.tags == 'error' %}bg-red-100 text-red-800{% elif message.tags == 'success' %}bg-green-100 text-green-800{% else %}bg-yellow-100 text-yellow-800{% endif %}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+<!-- Page Content -->
+<main class="max-w-7xl mx-auto p-4">
+  {% block content %}
+  <h1 class="text-center text-3xl font-bold text-yellow-700">Welcome to the Jewellery Shop</h1>
+  <p class="text-center text-lg text-gray-600">Explore our exquisite collection of jewellery.</p>
+  {% endblock %}
+</main>
+
+
+<!-- Footer -->
+<footer class="bg-gray-900 text-gray-300 mt-10 pt-10 pb-6">
+  <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
+
+    <!-- Brand -->
+    <div>
+      <h2 class="text-2xl font-bold text-yellow-500">✨ Jewellery</h2>
+      <p class="mt-2 text-gray-400">
+        Premium gold, diamond and silver jewellery for every special moment.
+      </p>
+
+      <!-- Social Icons -->
+      <div class="flex space-x-4 mt-4">
+        <a href="#" class="text-gray-300 hover:text-yellow-500 text-2xl">
+          <i class="fab fa-facebook"></i>
+        </a>
+        <a href="#" class="text-gray-300 hover:text-yellow-500 text-2xl">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="#" class="text-gray-300 hover:text-yellow-500 text-2xl">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div>
+      <h3 class="text-xl font-semibold text-yellow-500">Quick Links</h3>
+      <ul class="mt-3 space-y-2">
+        <li><a href="{% url 'shop:index' %}" class="hover:text-yellow-400">Home</a></li>
+        <li><a href="{% url 'shop:about' %}" class="hover:text-yellow-400">About</a></li>
+        <li><a href="{% url 'shop:contact' %}" class="hover:text-yellow-400">Contact</a></li>
+        <li><a href="{% url 'shop:wishlist' %}" class="hover:text-yellow-400">Wishlist</a></li>
+        <li><a href="{% url 'shop:cart' %}" class="hover:text-yellow-400">Cart</a></li>
+      </ul>
+    </div>
+
+    <!-- Support -->
+    <div>
+      <h3 class="text-xl font-semibold text-yellow-500">Support</h3>
+      <ul class="mt-3 space-y-2">
+        <li><a href="{% url 'shop:login' %}" class="hover:text-yellow-400">Login</a></li>
+        <li><a href="{% url 'shop:signup' %}" class="hover:text-yellow-400">Signup</a></li>
+        <li><a href="{% url 'shop:forgot_password' %}" class="hover:text-yellow-400">Forgot Password?</a></li>
+      </ul>
+    </div>
+
+    <!-- Contact -->
+    <div>
+      <h3 class="text-xl font-semibold text-yellow-500">Contact Us</h3>
+      <p class="mt-3 text-gray-400">📍 Chennai, Tamil Nadu, India</p>
+      <p class="mt-2">📞 +91 98765 43210</p>
+      <p class="mt-2">✉ support@jewellery.com</p>
+    </div>
+
+  </div>
+
+  <div class="border-t border-gray-700 mt-10 pt-4 text-center text-gray-400 text-sm">
+    © 2025 Jewellery Store. All rights reserved.
+  </div>
+</footer>
+
+<!-- FontAwesome Icons -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+{% extends 'shop/base.html' %}
+{% block content %}
+
+<div class="max-w-xl mx-auto mt-10 bg-white shadow-lg rounded-xl p-6 border border-yellow-200">
+
+  <h1 class="text-3xl font-bold text-center text-yellow-700 mb-4 tracking-wide">
+    Secure Checkout
+  </h1>
+
+  <div class="space-y-3 text-gray-700">
+      <p class="text-lg flex justify-between border-b pb-2">
+        <span class="font-semibold">Order ID:</span>
+        <span class="text-gray-900">{{ order.id }}</span>
+      </p>
+
+      <p class="text-lg flex justify-between border-b pb-2">
+        <span class="font-semibold">Total Amount:</span>
+        <span class="text-green-700 font-bold text-xl">₹{{ total }}</span>
+      </p>
+
+      <p class="text-sm text-center text-gray-500">
+        You will be redirected to Razorpay's secure payment gateway.
+      </p>
+  </div>
+
+  <form id="payment-form" method="post" action="{% url 'shop:verify_payment' %}" class="mt-6">
+      {% csrf_token %}
+      <input type="hidden" name="razorpay_order_id" value="{{ razorpay_order.id }}">
+  </form>
+
+  <button id="rzp-button"
+    class="w-full bg-gradient-to-r from-yellow-600 to-yellow-700 text-white py-3 rounded-lg font-semibold text-lg tracking-wide shadow-md hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">
+    💳 Proceed to Pay
+  </button>
+
+</div>
+
+<!-- Razorpay script -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+  const options = {
+    key: "{{ razorpay_key }}",
+    amount: {{ razorpay_order.amount }},
+    currency: "INR",
+    name: "✨ Jewellery Store ✨",
+    description: "Secure Online Payment",
+    order_id: "{{ razorpay_order.id }}",
+    image: "https://cdn-icons-png.flaticon.com/512/869/869869.png",
+    theme: { color: "#b7791f" },
+
+    handler: function (response) {
+
+        // Submit form data to backend
+        const f = document.getElementById('payment-form');
+
+        const pid = document.createElement("input");
+        pid.type = "hidden";
+        pid.name = "razorpay_payment_id";
+        pid.value = response.razorpay_payment_id;
+        f.appendChild(pid);
+
+        const oid = document.createElement("input");
+        oid.type = "hidden";
+        oid.name = "razorpay_order_id";
+        oid.value = response.razorpay_order_id;
+        f.appendChild(oid);
+
+        const sig = document.createElement("input");
+        sig.type = "hidden";
+        sig.name = "razorpay_signature";
+        sig.value = response.razorpay_signature;
+        f.appendChild(sig);
+
+        f.submit();  
+
+        // ⭐ Redirect user to home page (index) after success
+        window.location.href = "{% url 'shop:index' %}";
+    }
+  };
+
+  document.getElementById("rzp-button").onclick = function (e) {
+    const rzp = new Razorpay(options);
+    rzp.open();
+    e.preventDefault();
+  };
+</script>
+
+<script>
+  handler: function (response) {
+    const f = document.getElementById('payment-form');
+
+    const pid = document.createElement("input");
+    pid.type = "hidden";
+    pid.name = "razorpay_payment_id";
+    pid.value = response.razorpay_payment_id;
+    f.appendChild(pid);
+
+    const oid = document.createElement("input");
+    oid.type = "hidden";
+    oid.name = "razorpay_order_id";
+    oid.value = response.razorpay_order_id;
+    f.appendChild(oid);
+
+    const sig = document.createElement("input");
+    sig.type = "hidden";
+    sig.name = "razorpay_signature";
+    sig.value = response.razorpay_signature;
+    f.appendChild(sig);
+
+    // Submit → goes to verify_payment → show success page
+    f.submit();
+}
+
+</script>
+{% endblock %}

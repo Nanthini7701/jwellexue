@@ -1,0 +1,114 @@
+{% extends 'shop/base.html' %}
+{% block content %}
+<!-- Glitter Effect CSS -->
+<style>
+  .glitter-pointer-events-none {
+    pointer-events: none;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 1px);
+    background-size: 4px 4px;
+    animation: glitterMove 6s linear infinite;
+    opacity: .6;
+  }
+
+  @keyframes glitterMove {
+    0%   { transform: translate(0,0); }
+    50%  { transform: translate(-10px, -10px); }
+    100% { transform: translate(0,0); }
+  }
+</style>
+<!-- Hero Section -->
+<section class="relative w-full h-[70vh] flex items-center justify-center overflow-hidden">
+
+  <!-- Full Width Background Image -->
+  <img src="/static/images/hero1.jpeg"
+       class="absolute inset-0 w-full h-full object-cover"
+       alt="Luxury Jewellery">
+
+  <!-- Glitter Layer -->
+  <div class="absolute inset-0 glitter-pointer-events-none"></div>
+
+  <!-- Overlay Dark Shade -->
+  <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+
+  <!-- Hero Content -->
+  <div class="relative z-10 text-center text-white px-6">
+    <h1 class="text-4xl md:text-6xl font-bold drop-shadow-lg">
+      Discover Timeless Luxury ✨
+    </h1>
+    <p class="mt-4 text-lg md:text-2xl max-w-2xl mx-auto drop-shadow-md">
+      Explore premium handcrafted Gold, Diamond & Silver collections.
+    </p>
+
+    <a href="{% url 'shop:index' %}"
+       class="mt-8 inline-block bg-yellow-500 hover:bg-yellow-400 text-black font-semibold text-lg px-8 py-3 rounded-full shadow-lg transition-all duration-300">
+      Shop Now
+    </a>
+  </div>
+</section>
+<h1 class="text-2xl font-bold mb-4">Products</h1>
+<div class="mb-4">
+  <form method="get" class="flex gap-2">
+    <input type="text" name="q" placeholder="Search by name" value="{{ q }}" class="border p-2"/>
+   <select name="category" class="border p-2">
+  <option value="">All Categories</option>
+  {% for c in categories %}
+  <option value="{{ c.slug }}" {% if request.GET.category == c.slug %}selected{% endif %}>
+    {{ c.name }}
+  </option>
+  {% endfor %}
+</select>
+
+<select name="metal" class="border p-2">
+  <option value="">All Metals</option>
+  {% for m in metals %}
+  <option value="{{ m }}" {% if request.GET.metal == m %}selected{% endif %}>
+    {{ m }}
+  </option>
+  {% endfor %}
+</select>
+    <button class="bg-blue-600 text-white px-3 py-2">Filter</button>
+  </form>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+  {% for p in products %}
+  <div class="bg-white p-4 shadow">
+    {% if p.image %}<img src="{{ p.image.url }}" alt="{{ p.name }}" class="w-full h-48 object-cover">{% endif %}
+    <h2 class="font-semibold text-lg">{{ p.name }}</h2>
+    <p>₹{{ p.price }}</p>
+    <p class="text-sm">Metal: {{ p.metal_type }}</p>
+    <a href="{% url 'shop:detail' p.slug %}" class="text-blue-600">View</a>
+    {% if user.is_authenticated %}
+      <a href="{% url 'shop:add_to_cart' p.pk %}" class="ml-2 text-green-600">Add to cart</a>
+      <a href="{% url 'shop:add_to_wishlist' p.pk %}" class="ml-2">Wishlist</a>
+    {% else %}
+      <a href="{% url 'login' %}">Login to purchase</a>
+    {% endif %}
+  </div>
+  {% empty %}
+  <p>No products found.</p>
+  {% endfor %}
+</div>
+ <section class="text-center py-12">
+    <h2 class="text-4xl font-semibold text-yellow-700 mb-6">Our Bestselling Collection</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="bg-white border shadow-md p-6 rounded-lg">
+        <img src="/static/images/ring1.jpeg" alt="Diamond Ring" class="w-full h-64 object-cover rounded-md mb-4">
+        <h3 class="text-xl font-bold text-gray-800"> Ring</h3>
+        <p class="text-gray-600">A timeless piece of elegance. Perfect for any occasion.</p>
+      </div>
+
+      <div class="bg-white border shadow-md p-6 rounded-lg">
+        <img src="/static/images/dia2.jpg" alt="Diamond Ring" class="w-full h-64 object-cover rounded-md mb-4">
+        <h3 class="text-xl font-bold text-gray-800">Diamond </h3>
+        <p class="text-gray-600">A timeless piece of elegance. Perfect for any occasion.</p>
+      </div>
+
+      <div class="bg-white border shadow-md p-6 rounded-lg">
+        <img src="/static/images/ban1.webp" alt="Diamond Ring" class="w-full h-64 object-cover rounded-md mb-4">
+        <h3 class="text-xl font-bold text-gray-800">Bangles</h3>
+        <p class="text-gray-600">A timeless piece of elegance. Perfect for any occasion.</p>
+      </div>
+      <!-- Repeat similar blocks for other items -->
+    </div>
+  </section>
+{% endblock %}

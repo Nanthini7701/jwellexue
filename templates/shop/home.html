@@ -1,0 +1,15 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+  <section class="text-center py-12">
+    <h2 class="text-4xl font-semibold text-yellow-700 mb-6">Our Bestselling Collection</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="bg-white border shadow-md p-6 rounded-lg">
+        <img src="/static/images/hero.jpeg" alt="Diamond Ring" class="w-full h-64 object-cover rounded-md mb-4">
+        <h3 class="text-xl font-bold text-gray-800">Diamond Ring</h3>
+        <p class="text-gray-600">A timeless piece of elegance. Perfect for any occasion.</p>
+      </div>
+      <!-- Repeat similar blocks for other items -->
+    </div>
+  </section>
+{% endblock %}

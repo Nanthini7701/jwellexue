@@ -1,0 +1,72 @@
+{% extends 'shop/base.html' %}
+{% block content %}
+
+<style>
+.success-container {
+    max-width: 450px;
+    margin: 80px auto;
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    border: 1px solid #f3c66a;
+}
+
+.tick-animation {
+    width: 120px;
+    height: 120px;
+    margin: auto;
+    border-radius: 50%;
+    border: 5px solid #d9a441;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: pop 0.4s ease-out forwards;
+}
+
+.tick-animation i {
+    font-size: 60px;
+    color: #d4a017;
+    animation: tick 0.6s ease forwards;
+    opacity: 0;
+}
+
+@keyframes pop {
+    0% { transform: scale(0.2); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes tick {
+    0% { transform: scale(0.3); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+</style>
+
+<div class="success-container">
+    <div class="tick-animation">
+        <i class="fa fa-check"></i>
+    </div>
+
+    <h1 class="text-3xl font-bold text-yellow-700 mt-6">
+        Payment Successful!
+    </h1>
+
+    <p class="text-gray-600 mt-2">
+        Thank you for your purchase.  
+        Your order has been confirmed successfully.
+    </p>
+
+    <p class="text-gray-500 mt-3 text-sm">
+        Redirecting to home page...
+    </p>
+</div>
+
+<script>
+    // Auto redirect after 4 seconds
+    setTimeout(() => {
+        window.location.href = "{% url 'shop:index' %}";
+    }, 4000);
+</script>
+
+{% endblock %}
