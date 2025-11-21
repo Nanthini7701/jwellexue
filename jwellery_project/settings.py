@@ -6,7 +6,7 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY','change-me')
 DEBUG = os.getenv('DEBUG','1') == '1'
-ALLOWED_HOSTS = ['NANTHINIHARI.pythonanywhere.com','127.0.0.1','*']
+ALLOWED_HOSTS = ['NANTHINIHARI.pythonanywhere.com','127.0.0.1','*','https://jwellexue.onrender.com']
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
